@@ -1,0 +1,5 @@
+rootProject.name = 'apiserver'
+
+include ":apimessages"
+project(":apimessages").projectDir = file("../apimessages")
+
