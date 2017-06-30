@@ -4,6 +4,7 @@ import cn.edu.sjtu.se.walknshot.apiserver.entities.Token;
 import cn.edu.sjtu.se.walknshot.apiserver.entities.User;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
@@ -11,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class Authentication extends ServiceBase {
+    @Transactional
     public cn.edu.sjtu.se.walknshot.apimessages.Token login(String username, String password) {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("FROM User u WHERE u.name = :user AND u.password = :password");
