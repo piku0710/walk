@@ -7,3 +7,5 @@ apiserver/.gradle/
 apiserver/build/
 
 *.iml
+
+hibernate.cfg.xml
