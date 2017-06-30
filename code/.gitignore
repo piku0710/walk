@@ -1,3 +1,7 @@
-*/.idea/
-*/.gradle/
-*/build/
+apimessages/.idea/
+apimessages/.gradle/
+apimessages/build/
+
+apiserver/.idea/
+apiserver/.gradle/
+apiserver/build/
