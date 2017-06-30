@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="csapi:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/csapi_jar</output-path>
+    <root id="archive" name="walknshot-csapi.jar">
+      <element id="module-output" name="csapi_main" />
+    </root>
+  </artifact>
+</component>

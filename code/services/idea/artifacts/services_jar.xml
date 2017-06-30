@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="services:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/services_jar</output-path>
+    <root id="archive" name="walknshot-services.jar">
+      <element id="module-output" name="services_main" />
+    </root>
+  </artifact>
+</component>
