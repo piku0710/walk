@@ -1,6 +1,6 @@
 package cn.edu.sjtu.se.walknshot.apiserver.controllers;
 
-import cn.edu.sjtu.se.walknshot.apiserver.services.Authentication;
+import cn.edu.sjtu.se.walknshot.apiserver.services.AuthenticationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class AuthenticationController {
-    private Authentication auth;
+    private AuthenticationService auth;
 
-    public AuthenticationController(Authentication auth) {
+    public AuthenticationController(AuthenticationService auth) {
         this.auth = auth;
     }
 

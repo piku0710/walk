@@ -12,11 +12,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @Service
-public class Authentication extends ServiceBase {
+public class AuthenticationService extends ServiceBase {
     private TokenDAO tokenDAO;
     private UserDAO userDAO;
 
-    public Authentication(TokenDAO tokenDAO, UserDAO userDAO) {
+    public AuthenticationService(TokenDAO tokenDAO, UserDAO userDAO) {
         this.tokenDAO = tokenDAO;
         this.userDAO = userDAO;
     }
