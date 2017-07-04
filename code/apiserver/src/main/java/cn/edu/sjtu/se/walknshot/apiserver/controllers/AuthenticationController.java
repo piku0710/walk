@@ -18,10 +18,10 @@ public class AuthenticationController {
     @RequestMapping("/login")
     @ResponseBody
     public Object login(
-            @RequestParam(value = "user", required = true) String user,
+            @RequestParam(value = "username", required = true) String username,
             @RequestParam(value = "password", required = true) String password
             ) {
-        return auth.login(user, password);
+        return auth.login(username, password);
     }
 
     @RequestMapping("/validate/token")
@@ -30,5 +30,14 @@ public class AuthenticationController {
             @RequestParam(value = "token", required = true) String sToken
             ) {
         return auth.validateToken(Token.fromString(sToken));
+    }
+
+    @RequestMapping("/register")
+    @ResponseBody
+    public Object register(
+            @RequestParam(value = "username", required = true) String username,
+            @RequestParam(value = "password", required = true) String password
+            ) {
+        return auth.registerUser(username, password);
     }
 }

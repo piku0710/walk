@@ -24,4 +24,9 @@ public class UserDAO {
             return null;
         return (User) entries.get(0);
     }
+
+    public User createUser(User user) {
+        sessionFactory.getCurrentSession().save(user);
+        return user;
+    }
 }

@@ -1,15 +1,19 @@
 package cn.edu.sjtu.se.walknshot.apiserver.services;
 
+import cn.edu.sjtu.se.walknshot.apimessages.RegisterResponse;
 import cn.edu.sjtu.se.walknshot.apiserver.daos.TokenDAO;
 import cn.edu.sjtu.se.walknshot.apiserver.daos.UserDAO;
 import cn.edu.sjtu.se.walknshot.apiserver.entities.Token;
 import cn.edu.sjtu.se.walknshot.apiserver.entities.User;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Pattern;
 
 @Service
 public class AuthenticationService extends ServiceBase {
@@ -48,5 +52,33 @@ public class AuthenticationService extends ServiceBase {
     public Boolean validateToken(cn.edu.sjtu.se.walknshot.apimessages.Token mtoken) {
         Token token = tokenDAO.cvtFromMessage(mtoken);
         return token != null;
+    }
+
+    private boolean validUsername(String username) {
+        if (username == null)
+            return false;
+        return Pattern.matches("([a-z][a-z0-9_]{3,30})", username);
+    }
+
+    private boolean validPassword(String password) {
+        return password != null && password.length() >= 6;
+    }
+
+    @Transactional
+    public RegisterResponse registerUser(String username, String password) {
+        if (!validUsername(username))
+            return new RegisterResponse("Invalid username");
+        if (!validPassword(password))
+            return new RegisterResponse("Invalid password");
+        User user = new User();
+        user.setName(username);
+        user.setPassword(password);
+        try {
+            int userId = userDAO.createUser(user).getId();
+            return new RegisterResponse(userId);
+        } catch (DataIntegrityViolationException e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new RegisterResponse("Duplicate username");
+        }
     }
 }
