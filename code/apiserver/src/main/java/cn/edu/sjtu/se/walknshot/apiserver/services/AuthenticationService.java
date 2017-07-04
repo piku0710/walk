@@ -23,8 +23,7 @@ public class AuthenticationService extends ServiceBase {
 
     @Transactional
     public cn.edu.sjtu.se.walknshot.apimessages.Token login(String username, String password) {
-        cn.edu.sjtu.se.walknshot.apimessages.Token mToken = new cn.edu.sjtu.se.walknshot.apimessages.Token();
-        mToken.setUserId(0);
+        cn.edu.sjtu.se.walknshot.apimessages.Token mToken = new cn.edu.sjtu.se.walknshot.apimessages.Token(0, null);
 
         User user = userDAO.getUserByName(username);
         if (user == null || !user.getPassword().equals(password))
@@ -43,5 +42,11 @@ public class AuthenticationService extends ServiceBase {
         mToken.setUserId(token.getUserId());
         mToken.setPassphrase(token.getPassphrase());
         return mToken;
+    }
+
+    @Transactional
+    public Boolean validateToken(cn.edu.sjtu.se.walknshot.apimessages.Token mtoken) {
+        Token token = tokenDAO.cvtFromMessage(mtoken);
+        return token != null;
     }
 }

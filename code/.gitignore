@@ -1,12 +1,12 @@
 apimessages/.idea/
 apimessages/.gradle/
 apimessages/build/
-apimessages/out
+apimessages/out/
 
 apiserver/.idea/
 apiserver/.gradle/
 apiserver/build/
-apimessages/out
+apiserver/out/
 
 *.iml
 
