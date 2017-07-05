@@ -1,11 +1,13 @@
 apimessages/.idea/
 apimessages/.gradle/
 apimessages/build/
+apimessages/out/
 
 apiserver/.idea/
 apiserver/.gradle/
 apiserver/build/
+apiserver/out/
 
 *.iml
 
-hibernate.cfg.xml
+applicationContext.xml
