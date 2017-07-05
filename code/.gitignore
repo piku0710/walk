@@ -8,6 +8,11 @@ apiserver/.gradle/
 apiserver/build/
 apiserver/out/
 
+apiclient/.idea/
+apiclient/.gradle/
+apiclient/build/
+apiclient/out/
+
 *.iml
 
 applicationContext.xml

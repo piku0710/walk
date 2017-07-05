@@ -4,6 +4,11 @@ public class Token {
     private int userId;
     private String passphrase;
 
+    public Token() {
+        userId = 0;
+        passphrase = null;
+    }
+
     public Token(int userId, String passphrase) {
         this.userId = userId;
         this.passphrase = passphrase;
