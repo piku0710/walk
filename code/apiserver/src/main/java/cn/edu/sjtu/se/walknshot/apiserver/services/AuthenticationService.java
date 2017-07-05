@@ -1,6 +1,7 @@
 package cn.edu.sjtu.se.walknshot.apiserver.services;
 
 import cn.edu.sjtu.se.walknshot.apimessages.RegisterResponse;
+import cn.edu.sjtu.se.walknshot.apimessages.Util;
 import cn.edu.sjtu.se.walknshot.apiserver.daos.TokenDAO;
 import cn.edu.sjtu.se.walknshot.apiserver.daos.UserDAO;
 import cn.edu.sjtu.se.walknshot.apiserver.entities.Token;
@@ -54,21 +55,13 @@ public class AuthenticationService extends ServiceBase {
         return token != null;
     }
 
-    private boolean validUsername(String username) {
-        if (username == null)
-            return false;
-        return Pattern.matches("([a-z][a-z0-9_]{3,30})", username);
-    }
 
-    private boolean validPassword(String password) {
-        return password != null && password.length() >= 6;
-    }
 
     @Transactional
     public RegisterResponse registerUser(String username, String password) {
-        if (!validUsername(username))
+        if (!Util.validUsername(username))
             return new RegisterResponse("Invalid username");
-        if (!validPassword(password))
+        if (!Util.validPassword(password))
             return new RegisterResponse("Invalid password");
         User user = new User();
         user.setName(username);
