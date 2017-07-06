@@ -74,7 +74,31 @@ public class ClientImpl implements Client {
 
     @Override
     public void isLoginValid(Callback callback) {
-        callback.onSuccess(true);
+        if (!isLoggedIn()) {
+            callback.onSuccess(false);
+            return;
+        }
+        RequestBody body = new FormBody.Builder()
+                .add("token", getToken().toString())
+                .build();
+
+        Request request = new Request.Builder()
+                .url(getBaseUrl() + "/validate/token")
+                .post(body)
+                .build();
+
+        new OkHttpClient().newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onNetworkFailure(e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Boolean r = new ObjectMapper().readValue(response.body().string(), Boolean.class);
+                callback.onSuccess(r == null ? false : r);
+            }
+        });
     }
 
     @Override

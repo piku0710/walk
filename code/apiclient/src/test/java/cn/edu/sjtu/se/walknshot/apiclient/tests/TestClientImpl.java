@@ -7,10 +7,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestClientImpl {
+    private static Client client;
     public static void main(String[] args) {
         ClientImpl clientImpl = new ClientImpl();
         clientImpl.setBaseUrl("http://localhost:8080");
-        Client client = clientImpl;
+        client = clientImpl;
 
         client.login(new CallbackAutoNetworkFailure() {
                 @Override
@@ -27,10 +28,25 @@ public class TestClientImpl {
                         System.out.println("JSON error");
                     }
                     System.out.println(client.isLoggedIn());
+                    testLoginValid();
                 }
             },
             "anonymous", "secret");
 
         System.out.println(client.isLoggedIn());
+    }
+
+    private static void testLoginValid() {
+        client.isLoginValid(new CallbackAutoNetworkFailure() {
+                @Override
+                public void onFailure(Object arg) {
+                    // NOP
+                }
+
+                @Override
+                public void onSuccess(Object arg) {
+                    System.out.println("Login valid: " + arg);
+                }
+            });
     }
 }
