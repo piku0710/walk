@@ -120,6 +120,7 @@ public class ClientImpl implements Client {
 
     @Override
     public void logout(Callback callback) {
+        setToken(null);
         callback.onSuccess(true);
     }
 
