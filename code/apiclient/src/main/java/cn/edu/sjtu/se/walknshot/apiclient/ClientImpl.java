@@ -1,5 +1,6 @@
 package cn.edu.sjtu.se.walknshot.apiclient;
 
+import cn.edu.sjtu.se.walknshot.apimessages.RegisterResponse;
 import cn.edu.sjtu.se.walknshot.apimessages.Token;
 import cn.edu.sjtu.se.walknshot.apimessages.Util;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +34,28 @@ public class ClientImpl implements Client {
             callback.onFailure(1);
             return;
         }
-        callback.onSuccess(42);
+
+        RequestBody body = new FormBody.Builder()
+                .add("username", username)
+                .add("password", password)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(getBaseUrl() + "/register")
+                .post(body)
+                .build();
+
+        new OkHttpClient().newCall(request).enqueue(new CallbackForward(callback) {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                RegisterResponse rr = new ObjectMapper().readValue(response.body().string(), RegisterResponse.class);
+                if (rr.getSuccess()) {
+                    callback.onSuccess(rr.getUserId());
+                } else {
+                    callback.onFailure(2);
+                }
+            }
+        });
     }
 
     @Override

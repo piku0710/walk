@@ -5,6 +5,10 @@ public class RegisterResponse {
     private int userId;
     private String message;
 
+    public RegisterResponse() {
+        success = false;
+    }
+
     public RegisterResponse(String failReason) {
         success = false;
         userId = 0;
