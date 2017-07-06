@@ -53,12 +53,7 @@ public class ClientImpl implements Client {
                 .post(body)
                 .build();
 
-        new OkHttpClient().newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onNetworkFailure(e);
-            }
-
+        new OkHttpClient().newCall(request).enqueue(new CallbackForward(callback) {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Token token = new ObjectMapper().readValue(response.body().string(), Token.class);
@@ -87,7 +82,7 @@ public class ClientImpl implements Client {
                 .post(body)
                 .build();
 
-        new OkHttpClient().newCall(request).enqueue(new okhttp3.Callback() {
+        new OkHttpClient().newCall(request).enqueue(new CallbackForward(callback) {
             @Override
             public void onFailure(Call call, IOException e) {
                 callback.onNetworkFailure(e);
