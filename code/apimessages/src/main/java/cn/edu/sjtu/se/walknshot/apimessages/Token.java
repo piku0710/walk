@@ -1,5 +1,12 @@
 package cn.edu.sjtu.se.walknshot.apimessages;
 
+import cn.edu.sjtu.se.walknshot.apimessages.serializers.TokenDeserializer;
+import cn.edu.sjtu.se.walknshot.apimessages.serializers.TokenSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@JsonSerialize(using = TokenSerializer.class)
+@JsonDeserialize(using = TokenDeserializer.class)
 public class Token {
     private int userId;
     private String passphrase;
@@ -28,6 +35,11 @@ public class Token {
 
     public void setPassphrase(String passphrase) {
         this.passphrase = passphrase;
+    }
+
+    @Override
+    public String toString() {
+        return getUserId() + ":" + getPassphrase();
     }
 
     public static Token fromString(String str) {
