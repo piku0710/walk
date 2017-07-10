@@ -31,7 +31,7 @@
     </bean>
 
     <bean id="storageBasePath" class="java.lang.String">
-        <constructor-arg index="0" value="/home/lvzheng/courses/jsoc/storage"/>
+        <constructor-arg index="0" value="/path/to/storage"/>
     </bean>
     -->
 
@@ -41,6 +41,8 @@
     </bean>
 
     <!-- Injections -->
+
+    <!-- DAOs -->
 
     <bean id="pictureDAO" class="cn.edu.sjtu.se.walknshot.apiserver.daos.PictureDAO">
         <constructor-arg name="sessionFactory" ref="sessionFactory"/>
@@ -56,18 +58,22 @@
         <constructor-arg name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="pictureService" class="cn.edu.sjtu.se.walknshot.apiserver.services.PictureService">
-    </bean>
+    <!-- Services -->
 
+    <bean id="pictureService" class="cn.edu.sjtu.se.walknshot.apiserver.services.PictureService">
+        <constructor-arg name="pictureDAO" ref="pictureDAO"/>
+        <constructor-arg name="storageDAO" ref="storageDAO"/>
+    </bean>
     <bean id="authenticationService" class="cn.edu.sjtu.se.walknshot.apiserver.services.AuthenticationService">
         <constructor-arg name="tokenDAO" ref="tokenDAO"/>
         <constructor-arg name="userDAO" ref="userDAO"/>
     </bean>
 
+    <!-- Controllers -->
+
     <bean id="authenticationController" class="cn.edu.sjtu.se.walknshot.apiserver.controllers.AuthenticationController">
         <constructor-arg name="auth" ref="authenticationService"/>
     </bean>
-
     <bean id="pictureController" class="cn.edu.sjtu.se.walknshot.apiserver.controllers.PictureController">
         <constructor-arg name="auth" ref="authenticationService"/>
         <constructor-arg name="pic" ref="pictureService"/>
