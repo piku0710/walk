@@ -29,6 +29,7 @@ public class PictureController {
     @ResponseBody
     public Object uploadPicture(
             @RequestParam("token") String sToken,
+            @RequestParam("spot") long spotId,
             @RequestParam("file") MultipartFile file
             ) {
         Token token = Token.fromString(sToken);
@@ -42,7 +43,7 @@ public class PictureController {
             return null;
         }
 
-        return pic.storePicture(token.getUserId(), stream);
+        return pic.storePicture(token.getUserId(), spotId, stream);
     }
 
     @ExceptionHandler(MultipartException.class)

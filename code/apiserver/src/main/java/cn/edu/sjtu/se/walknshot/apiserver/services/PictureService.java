@@ -1,7 +1,9 @@
 package cn.edu.sjtu.se.walknshot.apiserver.services;
 
 import cn.edu.sjtu.se.walknshot.apiserver.daos.PictureDAO;
+import cn.edu.sjtu.se.walknshot.apiserver.daos.SpotDAO;
 import cn.edu.sjtu.se.walknshot.apiserver.daos.StorageDAO;
+import cn.edu.sjtu.se.walknshot.apiserver.entities.Storage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,17 +12,24 @@ import java.io.InputStream;
 @Service
 public class PictureService {
     private PictureDAO pictureDAO;
+    private SpotDAO spotDAO;
     private StorageDAO storageDAO;
 
     private final String storageCollection = "picture";
 
-    public PictureService(PictureDAO pictureDAO, StorageDAO storageDAO) {
+    public PictureService(PictureDAO pictureDAO, SpotDAO spotDAO, StorageDAO storageDAO) {
         this.pictureDAO = pictureDAO;
+        this.spotDAO = spotDAO;
         this.storageDAO = storageDAO;
     }
 
     @Transactional
-    public String storePicture(int userId, InputStream stream) {
-        return storageDAO.storeFile(storageCollection, stream);
+    public String storePicture(int userId, long spotId, InputStream stream) {
+        if (spotDAO.getSpot(spotId).getUserId() != userId)
+            return null;
+        Storage storage = storageDAO.storeFile(storageCollection, stream);
+        pictureDAO.addPicture(spotId, storage.getId());
+
+        return storage.getFilename();
     }
 }

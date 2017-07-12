@@ -13,4 +13,8 @@ public class SpotDAO {
     public void store(Spot spot) {
         sessionFactory.getCurrentSession().save(spot);
     }
+
+    public Spot getSpot(long id) {
+        return sessionFactory.getCurrentSession().load(Spot.class, id);
+    }
 }

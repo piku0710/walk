@@ -30,7 +30,7 @@ public class StorageDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    public String storeFile(String collection, InputStream istream) {
+    public Storage storeFile(String collection, InputStream istream) {
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("SHA-256");
@@ -67,8 +67,9 @@ public class StorageDAO {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("FROM Storage s WHERE s.filename = :filename");
         query.setParameter("filename", filename);
-        if (!query.list().isEmpty())
-            return filename;
+        List list = query.list();
+        if (!list.isEmpty())
+            return (Storage) list.get(0);
 
         String fullPath = basePath + "/" + collection + "/" + filename;
         fullPath.replace("/", File.separator);
@@ -84,6 +85,6 @@ public class StorageDAO {
         Storage storage = new Storage();
         storage.setFilename(filename);
         session.save(storage);
-        return filename;
+        return storage;
     }
 }
