@@ -46,7 +46,22 @@ public class TestClientImpl {
                 @Override
                 public void onSuccess(Object arg) {
                     System.out.println("Login valid: " + arg);
+                    testAddSpot();
                 }
             });
+    }
+
+    private static void testAddSpot() {
+        client.addSpot(new CallbackAutoNetworkFailure() {
+            @Override
+            public void onFailure(Object arg) {
+                // NOP
+            }
+
+            @Override
+            public void onSuccess(Object arg) {
+                System.out.println("Spot ID: " + arg);
+            }
+        }, 66, 111);
     }
 }

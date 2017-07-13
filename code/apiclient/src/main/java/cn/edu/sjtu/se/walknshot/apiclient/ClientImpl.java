@@ -129,6 +129,38 @@ public class ClientImpl implements Client {
     }
 
     @Override
+    public void addSpot(final Callback callback, double latitude, double longitude) {
+        if (!isLoggedIn() || !Util.validLatLng(latitude, longitude)) {
+            callback.onFailure(null);
+            return;
+        }
+
+        RequestBody body = new FormBody.Builder()
+                .add("token", getToken().toString())
+                .add("latitude", Double.toString(latitude))
+                .add("longitude", Double.toString(longitude))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(getBaseUrl() + "/spot/add")
+                .post(body)
+                .build();
+
+        new OkHttpClient().newCall(request).enqueue(new CallbackForward(callback) {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onNetworkFailure(e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Long r = new ObjectMapper().readValue(response.body().string(), Long.class);
+                callback.onSuccess(r);
+            }
+        });
+    }
+
+    @Override
     public void logout(Callback callback) {
         setToken(null);
         callback.onSuccess(true);

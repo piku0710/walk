@@ -19,6 +19,10 @@ public interface Client {
     // onFailure: Not used
     void isLoginValid(Callback callback);
 
+    // onSuccess: Long spot ID
+    // onFailure: null
+    void addSpot(Callback callback, double latitude, double longitude);
+
     // Local calls
 
     // onSuccess: Boolean always true
