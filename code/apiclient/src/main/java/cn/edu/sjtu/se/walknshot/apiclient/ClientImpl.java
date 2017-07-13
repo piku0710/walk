@@ -3,10 +3,12 @@ package cn.edu.sjtu.se.walknshot.apiclient;
 import cn.edu.sjtu.se.walknshot.apimessages.RegisterResponse;
 import cn.edu.sjtu.se.walknshot.apimessages.Token;
 import cn.edu.sjtu.se.walknshot.apimessages.Util;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ClientImpl implements Client {
     private Token token;
@@ -155,7 +157,52 @@ public class ClientImpl implements Client {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Long r = new ObjectMapper().readValue(response.body().string(), Long.class);
-                callback.onSuccess(r);
+                if (r != null)
+                    callback.onSuccess(r);
+                else
+                    callback.onFailure(null);
+            }
+        });
+    }
+
+    @Override
+    public void uploadPicture(final Callback callback, long spotId, byte[] file) {
+        if (!isLoggedIn()) {
+            callback.onFailure(null);
+            return;
+        }
+
+        RequestBody body = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("token", getToken().toString())
+                .addFormDataPart("spot", Long.toString(spotId))
+                .addFormDataPart("file", "picture", RequestBody.create(MediaType.parse("application/octet-stream"), file))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(getBaseUrl() + "/picture/upload")
+                .post(body)
+                .build();
+
+        new OkHttpClient().newCall(request).enqueue(new CallbackForward(callback) {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onNetworkFailure(e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String r = response.body().string();
+                if (!r.isEmpty())
+                    callback.onSuccess(r);
+                else
+                    callback.onFailure(null);
+                // try {
+                //     String r = new ObjectMapper().readValue(response.body().string(), String.class);
+                //     callback.onSuccess(r);
+                // } catch (JsonMappingException e) {
+                //     callback.onFailure(null);
+                // }
             }
         });
     }

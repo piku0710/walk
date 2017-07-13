@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestClientImpl {
     private static Client client;
+    private static long spotId;
+
     public static void main(String[] args) {
         final ClientImpl clientImpl = ClientImpl.getInstance();
         clientImpl.setBaseUrl("http://localhost:8080");
@@ -60,8 +62,24 @@ public class TestClientImpl {
 
             @Override
             public void onSuccess(Object arg) {
-                System.out.println("Spot ID: " + arg);
+                spotId = (long) arg;
+                System.out.println("Spot ID: " + spotId);
+                testUploadPicture();
             }
         }, 66, 111);
+    }
+
+    private static void testUploadPicture() {
+        client.uploadPicture(new CallbackAutoNetworkFailure() {
+            @Override
+            public void onFailure(Object arg) {
+                // NOP
+            }
+
+            @Override
+            public void onSuccess(Object arg) {
+                System.out.println("Picture: " + arg);
+            }
+        }, spotId, "Hello, world\n".getBytes());
     }
 }

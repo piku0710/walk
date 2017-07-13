@@ -1,5 +1,9 @@
 package cn.edu.sjtu.se.walknshot.apiclient;
 
+import jdk.nashorn.internal.codegen.CompilerConstants;
+
+import java.io.InputStream;
+
 public interface Client {
     // Async calls with network activities
 
@@ -22,6 +26,10 @@ public interface Client {
     // onSuccess: Long spot ID
     // onFailure: null
     void addSpot(Callback callback, double latitude, double longitude);
+
+    // onSuccess: String picture StorageId
+    // onFailure: null
+    void uploadPicture(Callback callback, long spotId, byte[] file);
 
     // Local calls
 
