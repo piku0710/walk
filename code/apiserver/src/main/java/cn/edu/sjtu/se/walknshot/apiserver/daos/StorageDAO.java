@@ -69,7 +69,7 @@ public class StorageDAO {
             return (Storage) list.get(0);
 
         String fullPath = basePath + "/" + collection + "/" + filename;
-        fullPath.replace("/", File.separator);
+        fullPath = fullPath.replace("/", File.separator);
 
         try {
             ostream.close();
