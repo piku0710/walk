@@ -6,9 +6,11 @@ import cn.edu.sjtu.se.walknshot.apiserver.daos.SpotDAO;
 import cn.edu.sjtu.se.walknshot.apiserver.daos.StorageDAO;
 import cn.edu.sjtu.se.walknshot.apiserver.entities.Picture;
 import cn.edu.sjtu.se.walknshot.apiserver.entities.Storage;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 @Service
@@ -38,5 +40,16 @@ public class PictureService {
         entry.setStorageName(storage.getFilename());
 
         return entry;
+    }
+
+    public InputStream getPicture(String filename) {
+        /*
+        try {
+            return IOUtils.toByteArray(storageDAO.getFile(storageCollection, filename));
+        } catch (IOException e) {
+            return null;
+        }
+        */
+        return storageDAO.getFile(storageCollection, filename);
     }
 }

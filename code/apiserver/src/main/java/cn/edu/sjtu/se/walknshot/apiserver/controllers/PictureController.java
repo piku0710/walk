@@ -4,6 +4,9 @@ import cn.edu.sjtu.se.walknshot.apimessages.Token;
 import cn.edu.sjtu.se.walknshot.apiserver.services.AuthenticationService;
 import cn.edu.sjtu.se.walknshot.apiserver.services.PictureService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,6 +49,17 @@ public class PictureController {
         return pic.storePicture(token.getUserId(), spotId, stream);
     }
 
+    @PostMapping("/static/picture")
+    @ResponseBody
+    public Object uploadPicture(
+            @RequestParam("name") String filename
+            ) {
+        if (filename == null)
+            return null;
+
+        InputStreamResource isr = new InputStreamResource(pic.getPicture(filename));
+        return new ResponseEntity<>(isr, HttpStatus.OK);
+    }
     @ExceptionHandler(MultipartException.class)
     @ResponseBody
     public Object handleMultipartException(MultipartException e) {

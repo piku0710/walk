@@ -9,10 +9,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.xml.bind.DatatypeConverter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -86,5 +83,18 @@ public class StorageDAO {
         storage.setFilename(filename);
         session.save(storage);
         return storage;
+    }
+
+    public InputStream getFile(String collection, String filename) {
+        String fullPath = basePath + "/" + collection + "/" + filename;
+        fullPath = fullPath.replace("/", File.separator);
+
+        File file = new File(fullPath);
+        try {
+            FileInputStream stream = new FileInputStream(file);
+            return stream;
+        } catch (IOException e) {
+            return null;
+        }
     }
 }
