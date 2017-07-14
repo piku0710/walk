@@ -80,6 +80,6 @@ public class TestClientImpl {
             public void onSuccess(Object arg) {
                 System.out.println("Picture: " + arg);
             }
-        }, spotId, "Hello, world\n".getBytes());
+        }, "Hello, world\n".getBytes());
     }
 }

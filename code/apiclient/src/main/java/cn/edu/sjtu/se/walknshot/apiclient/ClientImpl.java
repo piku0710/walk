@@ -14,6 +14,7 @@ import java.io.InputStream;
 public class ClientImpl implements Client {
     private Token token;
     private String baseUrl = "http://localhost:8080";
+    private long lastSpot = 0;
 
     private static ClientImpl singleton = new ClientImpl();
 
@@ -158,17 +159,19 @@ public class ClientImpl implements Client {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Long r = new ObjectMapper().readValue(response.body().string(), Long.class);
-                if (r != null)
+                if (r != null) {
+                    lastSpot = r;
                     callback.onSuccess(r);
-                else
+                } else {
                     callback.onFailure(null);
+                }
             }
         });
     }
 
     @Override
-    public void uploadPicture(final Callback callback, long spotId, byte[] file) {
-        if (!isLoggedIn()) {
+    public void uploadPicture(final Callback callback, byte[] file) {
+        if (!isLoggedIn() || lastSpot == 0) {
             callback.onFailure(null);
             return;
         }
@@ -176,7 +179,7 @@ public class ClientImpl implements Client {
         RequestBody body = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("token", getToken().toString())
-                .addFormDataPart("spot", Long.toString(spotId))
+                .addFormDataPart("spot", Long.toString(lastSpot))
                 .addFormDataPart("file", "picture", RequestBody.create(MediaType.parse("application/octet-stream"), file))
                 .build();
 

@@ -27,9 +27,10 @@ public interface Client {
     // onFailure: null
     void addSpot(Callback callback, double latitude, double longitude);
 
+    // Upload picture with spot = most recently added spot
     // onSuccess: String picture StorageId
     // onFailure: null
-    void uploadPicture(Callback callback, long spotId, byte[] file);
+    void uploadPicture(Callback callback, byte[] file);
 
     // Local calls
 
