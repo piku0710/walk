@@ -3,12 +3,14 @@ package cn.edu.sjtu.se.walknshot.apiclient.tests;
 import cn.edu.sjtu.se.walknshot.apiclient.CallbackAutoNetworkFailure;
 import cn.edu.sjtu.se.walknshot.apiclient.Client;
 import cn.edu.sjtu.se.walknshot.apiclient.ClientImpl;
+import cn.edu.sjtu.se.walknshot.apimessages.PictureEntry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestClientImpl {
     private static Client client;
     private static long spotId;
+    private static PictureEntry picture;
 
     public static void main(String[] args) {
         final ClientImpl clientImpl = ClientImpl.getInstance();
@@ -79,7 +81,23 @@ public class TestClientImpl {
             @Override
             public void onSuccess(Object arg) {
                 System.out.println("Picture: " + arg);
+                picture = (PictureEntry) arg;
+                testDownloadPicture();
             }
         }, "Hello, world\n".getBytes());
+    }
+
+    private static void testDownloadPicture() {
+        client.downloadPicture(new CallbackAutoNetworkFailure() {
+            @Override
+            public void onFailure(Object arg) {
+                // NOP
+            }
+
+            @Override
+            public void onSuccess(Object arg) {
+                System.out.println(new String((byte[]) arg));
+            }
+        }, picture.getStorageName());
     }
 }

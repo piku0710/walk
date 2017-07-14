@@ -32,6 +32,10 @@ public interface Client {
     // onFailure: null
     void uploadPicture(Callback callback, byte[] file);
 
+    // onSuccess: byte[] image file
+    // onFailure: null
+    void downloadPicture(Callback callback, String storageName);
+
     // Local calls
 
     // onSuccess: Boolean always true

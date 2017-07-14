@@ -210,6 +210,34 @@ public class ClientImpl implements Client {
     }
 
     @Override
+    public void downloadPicture(final Callback callback, String storageName) {
+        RequestBody body = new FormBody.Builder()
+                .add("name", storageName)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(getBaseUrl() + "/static/picture")
+                .post(body)
+                .build();
+
+        new OkHttpClient().newCall(request).enqueue(new CallbackForward(callback) {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onNetworkFailure(e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                byte[] bytes = response.body().bytes();
+                if (bytes.length == 0)
+                    callback.onFailure(null);
+                else
+                    callback.onSuccess(bytes);
+            }
+        });
+    }
+
+    @Override
     public void logout(Callback callback) {
         setToken(null);
         callback.onSuccess(true);
