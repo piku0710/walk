@@ -1,5 +1,6 @@
 package cn.edu.sjtu.se.walknshot.apiclient;
 
+import cn.edu.sjtu.se.walknshot.apimessages.PictureEntry;
 import cn.edu.sjtu.se.walknshot.apimessages.RegisterResponse;
 import cn.edu.sjtu.se.walknshot.apimessages.Token;
 import cn.edu.sjtu.se.walknshot.apimessages.Util;
@@ -192,17 +193,15 @@ public class ClientImpl implements Client {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String r = response.body().string();
-                if (!r.isEmpty())
-                    callback.onSuccess(r);
-                else
+                try {
+                    PictureEntry r = new ObjectMapper().readValue(response.body().string(), PictureEntry.class);
+                    if (r != null)
+                        callback.onSuccess(r);
+                    else
+                        callback.onFailure(null);
+                } catch (JsonMappingException e) {
                     callback.onFailure(null);
-                // try {
-                //     String r = new ObjectMapper().readValue(response.body().string(), String.class);
-                //     callback.onSuccess(r);
-                // } catch (JsonMappingException e) {
-                //     callback.onFailure(null);
-                // }
+                }
             }
         });
     }
