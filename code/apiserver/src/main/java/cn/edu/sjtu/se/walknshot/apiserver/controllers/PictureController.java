@@ -64,7 +64,7 @@ public class PictureController {
 
     @PostMapping("/pgroup/upload")
     @ResponseBody
-    public Object uploadPgroup(
+    public Object uploadPGroup(
             @RequestParam("token") String sToken,
             @RequestParam("file[]") List<MultipartFile> files
         ) {
