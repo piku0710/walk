@@ -118,7 +118,11 @@ public class TestClientImpl {
 
             @Override
             public void onSuccess(Object arg) {
-                System.out.println("PGroup: " + arg);
+                PGroupDetails details = (PGroupDetails) arg;
+                List<PictureEntry> pics = details.getPictures();
+                for (PictureEntry entry : pics) {
+                    System.out.println("PGroup: " + entry.getStorageName());
+                }
             }
         }, list);
     }

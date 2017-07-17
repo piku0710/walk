@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -68,15 +69,17 @@ public class PictureController {
             @RequestParam("token") String sToken,
             @RequestParam("file[]") List<MultipartFile> files
         ) {
+        Token token = Token.fromString(sToken);
+        if (!auth.validateToken(token))
+            return null;
+        List<InputStream> streamList = new ArrayList<>();
         try {
-            for (int i = 0; i < files.size(); ++i) {
-                IOUtils.copy(files.get(i).getInputStream(), System.out);
-                System.out.println();
-            }
+            for (MultipartFile file : files)
+                streamList.add(file.getInputStream());
+            return pic.storePGroup(token.getUserId(), streamList);
         } catch (IOException e) {
             return null;
         }
-        return null;
     }
 
     @ExceptionHandler(MultipartException.class)
