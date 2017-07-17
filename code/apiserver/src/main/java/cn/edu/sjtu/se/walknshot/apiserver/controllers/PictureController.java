@@ -33,7 +33,7 @@ public class PictureController {
     @ResponseBody
     public Object uploadPicture(
             @RequestParam("token") String sToken,
-            @RequestParam("spot") long spotId,
+            @RequestParam("spot") Long spotId,
             @RequestParam("file") MultipartFile file
             ) {
         Token token = Token.fromString(sToken);

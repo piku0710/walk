@@ -28,8 +28,8 @@ public class PictureService {
     }
 
     @Transactional
-    public PictureEntry storePicture(int userId, long spotId, InputStream stream) {
-        if (spotDAO.getSpot(spotId).getUserId() != userId)
+    public PictureEntry storePicture(int userId, Long spotId, InputStream stream) {
+        if (spotId != null && spotDAO.getSpot(spotId).getUserId() != userId)
             return null;
         Storage storage = storageDAO.storeFile(storageCollection, stream);
         Picture picture = pictureDAO.addPicture(spotId, storage.getId());
