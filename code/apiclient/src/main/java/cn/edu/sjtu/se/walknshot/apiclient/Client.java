@@ -1,8 +1,6 @@
 package cn.edu.sjtu.se.walknshot.apiclient;
 
-import jdk.nashorn.internal.codegen.CompilerConstants;
-
-import java.io.InputStream;
+import java.util.List;
 
 public interface Client {
     // Async calls with network activities
@@ -35,6 +33,10 @@ public interface Client {
     // onSuccess: byte[] image file
     // onFailure: null
     void downloadPicture(Callback callback, String storageName);
+
+    // onSuccess: PGroupDetails
+    // onFailure: null
+    void uploadPGroup(Callback callback, List<byte[]> pictures);
 
     // Local calls
 
