@@ -278,6 +278,44 @@ public class ClientImpl implements Client {
     }
 
     @Override
+    public void addComment(final Callback callback, int pgroupId, String content) {
+        if (!isLoggedIn() || content == null) {
+            callback.onFailure(null);
+            return;
+        }
+
+        RequestBody body = new FormBody.Builder()
+                .add("token", getToken().toString())
+                .add("pgroupId", Integer.toString(pgroupId))
+                .add("content", content)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(getBaseUrl() + "/comment/add")
+                .post(body)
+                .build();
+
+        new OkHttpClient().newCall(request).enqueue(new CallbackForward(callback) {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onNetworkFailure(e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                CommentEntry r = new ObjectMapper().readValue(response.body().string(), CommentEntry.class);
+                if (r != null) {
+                    callback.onSuccess(null);
+                } else {
+                    callback.onFailure(null);
+                }
+            }
+        });
+    }
+
+
+
+    @Override
     public void logout(Callback callback) {
         setToken(null);
         callback.onSuccess(true);

@@ -38,6 +38,10 @@ public interface Client {
     // onFailure: null
     void uploadPGroup(Callback callback, List<byte[]> pictures);
 
+    // onSuccess: null
+    // onFailure: null
+    void addComment(Callback callback, int pgroupId, String content);
+
     // Local calls
 
     // onSuccess: Boolean always true
