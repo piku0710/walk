@@ -106,4 +106,13 @@ public class PictureService {
         entry.setTime(comment.getTime());
         return entry;
     }
+
+
+    @Transactional
+    public List<Integer> getPGroupList(Integer uid) {
+        if (uid == null)
+            return pgroupDAO.getAll();
+        else
+            return pgroupDAO.getByUser(uid);
+    }
 }

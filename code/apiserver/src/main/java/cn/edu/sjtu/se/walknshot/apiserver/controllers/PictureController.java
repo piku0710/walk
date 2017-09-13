@@ -104,6 +104,18 @@ public class PictureController {
         return pic.getPGroup(pgroupId);
     }
 
+    @PostMapping("pgroup/list")
+    @ResponseBody
+    public Object getPGroups(
+            @RequestParam("token") String sToken,
+            @RequestParam("everyone") int everyone
+        ) {
+        Token token = Token.fromString(sToken);
+        if (!auth.validateToken(token))
+            return null;
+        return pic.getPGroupList(everyone == 1 ? null : token.getUserId());
+    }
+
     @ExceptionHandler(MultipartException.class)
     @ResponseBody
     public Object handleMultipartException(MultipartException e) {

@@ -56,7 +56,8 @@ public class TestClientImpl {
                 public void onSuccess(Object arg) {
                     System.out.println("Login valid: " + arg);
                     // testAddSpot();
-                    testUploadPGroup();
+                    // testUploadPGroup();
+                    testPGroups();
                 }
             });
     }
@@ -142,5 +143,19 @@ public class TestClientImpl {
                 System.out.println("comment added");
             }
         }, pgroupId, "Hahahaha jajajaja");
+    }
+
+    private static void testPGroups() {
+        client.getPGroups(new CallbackAutoNetworkFailure() {
+            @Override
+            public void onFailure(Object arg) {
+                // NOP
+            }
+
+            @Override
+            public void onSuccess(Object arg) {
+                System.out.println(arg);
+            }
+        }, true);
     }
 }

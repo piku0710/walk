@@ -5,6 +5,7 @@ import cn.edu.sjtu.se.walknshot.apiserver.entities.PGroup;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PGroupDAO {
@@ -36,5 +37,18 @@ public class PGroupDAO {
         Query query = sessionFactory.getCurrentSession().createQuery("FROM Comment c WHERE c.pgroupId = :pgroupId");
         query.setParameter("pgroupId", pgroupId);
         return query.list();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Integer> getAll() {
+        List<PGroup> pg = sessionFactory.getCurrentSession().createQuery("FROM PGroup").list();
+        List<Integer> rv = new ArrayList<Integer>();
+        for (PGroup pgroup : pg)
+            rv.add(pgroup.getId());
+        return rv;
+    }
+
+    public List<Integer> getByUser(int uid) {
+        return getAll();
     }
 }
