@@ -326,7 +326,7 @@ public class ClientImpl implements Client {
                 .build();
 
         Request request = new Request.Builder()
-                .url(getBaseUrl() + "/comment/add")
+                .url(getBaseUrl() + "/pgroup/list")
                 .post(body)
                 .build();
 
